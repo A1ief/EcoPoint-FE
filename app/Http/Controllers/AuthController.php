@@ -56,4 +56,10 @@ class AuthController extends Controller
 
         return back()->with('error', 'Login gagal!');
     }
+
+    public function logout()
+    {
+        session()->flush();
+        return redirect()->route('login')->with('success', 'Logout berhasil!');
+    }
 }
