@@ -18,8 +18,10 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-   public function login(Request $request)
-   {
+    public function login(Request $request)
+    {
+
+        //    dd($request->all());
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -32,36 +34,26 @@ class AuthController extends Controller
             'password' => $validated['password'],
         ]);
 
+        // dd($response->json());
+
         $data = $response->json();
         if ($response->successful() && $data['status'] === true) {
             session([
                 'token' => $data['token'],
                 'user' => [
-                    'id' => $data['data']['id'],
-                    'name' => $data['data']['name'],
+                    'id' => $data['data']['id_user'],
+                    'name' => $data['data']['nama'],
                     'email' => $data['data']['email'],
                 ],
                 'role' => $data['role'] ?? null,
             ]);
 
-            return redirect()->route('dashboard')->with([
-                'swal' => [
-                    'icon' => 'success',
-                    'title' => 'Login Berhasil!',
-                    'text' => 'Selamat datang, ' . ($dataUser['name'] ?? 'User') . '!',
-                    'timer' => 2000
-                ]
-            ]);
+            // dd($response->json());
+
+            return redirect()->route('dashboard')->with('success', 'Login berhasil!');
         }
 
-        return back()->withErrors([
-            'login' => $data['message'] ?? 'Email atau password salah!',
-        ])->with([
-            'swal' => [
-                'icon' => 'error',
-                'title' => 'Login Gagal!',
-                'text' => $data['message'] ?? 'Email atau password salah!',
-            ]
-        ]);
+
+        return back()->with('error', 'Login gagal!');
     }
 }

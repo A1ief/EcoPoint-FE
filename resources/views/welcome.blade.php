@@ -167,7 +167,7 @@
             <a href="#profil" class="block hover:text-green-100 transition">Profil</a>
             <a href="#cara-kerja" class="block hover:text-green-100 transition">Cara Kerja</a>
             <a href="#kontak" class="block hover:text-green-100 transition">Kontak</a>
-            <a href="{{ route('login') }}" class="block bg-white text-green-600 px-6 py-2 rounded-full font-semibold text-center">Login</a>
+            <a href="{{ route('showlogin') }}" class="block bg-white text-green-600 px-6 py-2 rounded-full font-semibold text-center">Login</a>
         </div>
     </nav>
 

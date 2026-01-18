@@ -4,18 +4,17 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
     public function handle($request, Closure $next, ...$roles)
     {
-        // BELUM LOGIN → REDIRECT LOGIN
-        if (!auth()->check()) {
+        if (!session()->has('is_login')) {
             return redirect()->route('login');
         }
 
-        // ROLE TIDAK SESUAI → 403 PAGE
-        if (!in_array(auth()->user()->role, $roles)) {
+        if (!in_array(session('role'), $roles)) {
             abort(403, 'Unauthorized');
         }
 
