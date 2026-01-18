@@ -329,10 +329,10 @@
             </button>
          </form>
 
-         <div class="register-link">
+         {{-- <div class="register-link">
             Belum punya akun?
             <a href="{{ route('register') }}">Register</a>
-         </div>
+         </div> --}}
       </div>
    </div>
 
