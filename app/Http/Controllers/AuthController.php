@@ -26,18 +26,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
+            'alamat' => 'required',
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|min:6',
+            'password_confirmation' => 'required|same:password',
         ]);
 
         $response = Http::withHeaders([
             'Accept' => 'application/json',
         ])->post("{$this->apiUrl}/register", [
-            'name' => $validated['name'],
+            'nama' => $validated['nama'],
+            'alamat' => $validated['alamat'],
             'email' => $validated['email'],
             'password' => $validated['password'],
+            'password_confirmation' => $validated['password_confirmation'],
         ]);
+
+        // dd($response->json());
 
         if ($response->successful()) {
             return redirect()->route('login')->with('success', 'Register berhasil!');
