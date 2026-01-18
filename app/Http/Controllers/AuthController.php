@@ -18,6 +18,34 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+        ])->post("{$this->apiUrl}/register", [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'],
+        ]);
+
+        if ($response->successful()) {
+            return redirect()->route('login')->with('success', 'Register berhasil!');
+        } else {
+            return redirect()->route('register')->with('error', 'Register gagal!');
+        }
+    }
+
     public function login(Request $request)
     {
 
