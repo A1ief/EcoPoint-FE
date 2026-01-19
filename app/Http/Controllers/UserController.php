@@ -131,7 +131,7 @@ class UserController extends Controller
 
         try {
             $response = $this->makeRequest('post', '/users', $validated);
-
+    
             if ($response->successful()) {
                 return redirect()->route('users.index')
                     ->with('success', 'User berhasil ditambahkan');

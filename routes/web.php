@@ -33,13 +33,20 @@ Route::prefix('users')->group(function () {
 });
 
 // For superadmin only
-Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
+// Route::middleware(['auth', 'role:superadmin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::get('users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-    
+
+    Route::get('/rubbish', [RubbishController::class, 'index'])->name('rubbish');
+    Route::get('/rubbishCreate', [RubbishController::class, 'create'])->name('rubbishCreate');
+    Route::post('/rubbishStore', [RubbishController::class, 'store'])->name('rubbishStore');
+    Route::get('/rubbishEdit/{id}', [RubbishController::class, 'edit'])->name('rubbishEdit');
+    Route::put('/rubbishUpdate/{id}', [RubbishController::class, 'update'])->name('rubbishUpdate');
+    Route::delete('/rubbishDestroy/{id}', [RubbishController::class, 'destroy'])->name('rubbishDestroy');
+
     // Points routes
     Route::get('/point', [PointController::class, 'index'])->name('point.index');
     Route::get('/point/create', [PointController::class, 'create'])->name('point.create');
@@ -49,7 +56,7 @@ Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.'
     Route::delete('/point/{id}', [PointController::class, 'destroy'])->name('point.destroy');
     Route::post('/point/{id}/approve', [PointController::class, 'approve'])->name('point.approve');
     Route::post('/point/{id}/reject', [PointController::class, 'reject'])->name('point.reject');
-});
+// });
 
 // routes/web.php
 Route::get('/test-api', [UserController::class, 'testConnection']);

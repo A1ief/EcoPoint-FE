@@ -37,7 +37,7 @@
             </a>
 
             <!-- Kelola Sampah -->
-            <a href=""
+            <a href="{{ route('rubbish') }}"
                 class="flex items-center space-x-3 px-4 py-3 rounded-lg {{ request()->routeIs('superadmin.sampah.*') ? 'bg-green-600 text-white shadow-md' : 'text-green-100 hover:bg-green-600 hover:text-white' }} transition-all duration-200">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
