@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PointController;
 use App\Http\Controllers\TestController;
 use Illuminate\Container\Attributes\Auth;
 
@@ -36,14 +37,23 @@ Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.'
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::get('users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // Points routes
+    Route::get('/point', [PointController::class, 'index'])->name('point.index');
+    Route::get('/point/create', [PointController::class, 'create'])->name('point.create');
+    Route::post('/point', [PointController::class, 'store'])->name('point.store');
+    Route::get('/point/{id}/edit', [PointController::class, 'edit'])->name('point.edit');
+    Route::put('/point/{id}', [PointController::class, 'update'])->name('point.update');
+    Route::delete('/point/{id}', [PointController::class, 'destroy'])->name('point.destroy');
+    Route::post('/point/{id}/approve', [PointController::class, 'approve'])->name('point.approve');
+    Route::post('/point/{id}/reject', [PointController::class, 'reject'])->name('point.reject');
 });
-// });
 
 // routes/web.php
 Route::get('/test-api', [UserController::class, 'testConnection']);
 
-Route::get('/rubbish', [TestController::class, 'rubbish'])->name('rubbish');
-Route::get('/rubbishCreate', [TestController::class, 'rubbishCreate'])->name('rubbishCreate');
-Route::get('/rubbishEdit', [TestController::class, 'rubbishEdit'])->name('rubbishEdit');
-Route::get('/point', [TestController::class, 'point'])->name('point');
-Route::get('/pointCreate', [TestController::class, 'pointCreate'])->name('pointCreate');
+// Route::get('/rubbish', [TestController::class, 'rubbish'])->name('rubbish');
+// Route::get('/rubbishCreate', [TestController::class, 'rubbishCreate'])->name('rubbishCreate');
+// Route::get('/rubbishEdit', [TestController::class, 'rubbishEdit'])->name('rubbishEdit');
+// Route::get('/point', [TestController::class, 'point'])->name('point');
+// Route::get('/pointCreate', [TestController::class, 'pointCreate'])->name('pointCreate');

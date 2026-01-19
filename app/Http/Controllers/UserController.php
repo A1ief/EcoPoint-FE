@@ -77,13 +77,11 @@ class UserController extends Controller
         try {
             $url = '/users';
 
-            // Parameter untuk filter
             $params = [];
             if ($request->has('search')) {
                 $params['search'] = $request->search;
             }
 
-            // Panggil API dengan parameter
             $response = $this->makeRequest('get', $url, $params);
 
             if ($response->successful()) {
