@@ -23,29 +23,18 @@
 
         <!-- Form Section -->
         <div class="bg-white rounded-xl shadow-md p-6">
-            <form method="POST" action="#" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('rubbishUpdate', $data['id_sampah']) }}" enctype="multipart/form-data"
+                class="space-y-6">
+                @csrf
+                @method('PUT')
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Pemilik -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Pemilik <span class="text-red-500">*</span>
-                        </label>
-                        <select name="id_user"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors">
-                            <option value="">Pilih Pemilik</option>
-                            <option value="1" selected>John Doe</option>
-                            <option value="2">Jane Smith</option>
-                            <option value="3">Bob Johnson</option>
-                        </select>
-                    </div>
-
                     <!-- Berat -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Berat (kg) <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
-                            <input type="number" name="berat" step="0.01" min="0" value="5.00"
+                            <input type="number" name="berat" step="0.01" min="0" value="{{ $data['berat'] }}"
                                 placeholder="Masukkan berat dalam kg"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors">
                             <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3.5" fill="none" stroke="currentColor"
@@ -62,17 +51,30 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Jenis Sampah <span class="text-red-500">*</span>
                         </label>
+
                         <select name="jenis"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors">
+
+                            <!-- Placeholder -->
                             <option value="">Pilih Jenis Sampah</option>
-                            <option value="plastik" selected>Plastik</option>
-                            <option value="kertas">Kertas</option>
-                            <option value="logam">Logam</option>
-                            <option value="kaca">Kaca</option>
-                            <option value="organik">Organik</option>
-                            <option value="lainnya">Lainnya</option>
+
+                            @php
+                                $jenisOptions = ['plastik', 'kertas', 'logam', 'kaca', 'organik', 'lainnya'];
+                                $selectedJenis = old('jenis', $data['jenis'] ?? '');
+                            @endphp
+
+                            @foreach ($jenisOptions as $jenis)
+                                <option value="{{ $jenis }}" {{ $selectedJenis === $jenis ? 'selected' : '' }}>
+                                    {{ ucfirst($jenis) }}
+                                </option>
+                            @endforeach
                         </select>
+
+                        @error('jenis')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
+
 
                     <!-- Kriteria -->
                     <div class="md:col-span-2">
@@ -80,49 +82,70 @@
                             Kriteria <span class="text-red-500">*</span>
                         </label>
                         <textarea name="kriteria" rows="3" placeholder="Contoh: Plastik botol PET warna hijau, kondisi bersih"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors">Plastik Botol Bekas</textarea>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors">{{ $data['kriteria'] }}</textarea>
                         <p class="text-xs text-gray-500 mt-1">Deskripsikan sampah secara detail</p>
                     </div>
 
-                    <!-- Current Photo Preview -->
+                    <!-- Foto Saat Ini -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Foto Saat Ini
                         </label>
+
                         <div class="flex items-center space-x-4">
                             <div class="border border-gray-200 rounded-lg p-4">
-                                <p class="text-sm text-gray-600 mb-2">Tidak ada foto tersedia</p>
-                                <p class="text-xs text-gray-500">Upload foto baru untuk mengganti</p>
+                                @if (!empty($data['foto']))
+                                    <img src="{{ $imgUrl . '/storage/' . $data['foto'] }}" alt="Foto Sampah"
+                                        class="w-32 h-32 object-cover rounded-md border">
+                                @else
+                                    <p class="text-sm text-gray-600 mb-2">Tidak ada foto tersedia</p>
+                                    <p class="text-xs text-gray-500">Upload foto baru untuk mengganti</p>
+                                @endif
                             </div>
+
                             <div class="text-sm text-gray-600">
-                                <span class="text-yellow-600">*</span> Kosongkan jika tidak ingin mengubah foto
+                                <span class="text-yellow-600">*</span>
+                                Kosongkan jika tidak ingin mengubah foto
                             </div>
                         </div>
                     </div>
 
-                    <!-- New Photo Upload -->
+
+                    <!-- Upload Foto Baru -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Upload Foto Baru
                         </label>
-                        <div
-                            class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors">
-                            <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+
+                        <label
+                            class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-green-500 transition-colors cursor-pointer block">
+
+                            <!-- Preview -->
+                            <img id="new-photo-preview" class="hidden mx-auto mb-4 w-40 h-40 object-cover rounded-lg border"
+                                alt="Preview Foto Baru">
+
+                            <!-- Icon -->
+                            <svg id="upload-icon" class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                 </path>
                             </svg>
-                            <p class="text-sm text-gray-600 mb-2">
-                                <span class="font-medium text-green-600 hover:text-green-500 cursor-pointer">
+
+                            <p id="upload-text" class="text-sm text-gray-600 mb-2">
+                                <span class="font-medium text-green-600 hover:text-green-500">
                                     Pilih file baru
                                 </span>
                                 atau drag and drop
                             </p>
+
                             <p class="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
-                            <input type="file" name="foto" class="hidden" accept="image/*">
-                        </div>
+
+                            <input type="file" name="foto" accept="image/*" class="hidden"
+                                onchange="previewNewPhoto(event)">
+                        </label>
                     </div>
+
                 </div>
 
                 <!-- Action Buttons -->
@@ -171,4 +194,34 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function previewNewPhoto(event) {
+            const input = event.target;
+            const preview = document.getElementById('new-photo-preview');
+            const icon = document.getElementById('upload-icon');
+            const text = document.getElementById('upload-text');
+
+            if (input.files && input.files[0]) {
+
+                // validasi ukuran 5MB
+                if (input.files[0].size > 5 * 1024 * 1024) {
+                    alert("Ukuran file maksimal 5MB");
+                    input.value = "";
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    icon.classList.add('hidden');
+                    text.classList.add('hidden');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endsection

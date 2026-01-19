@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\RubbishController;
 use App\Http\Controllers\TestController;
 use Illuminate\Container\Attributes\Auth;
 
@@ -42,8 +43,11 @@ Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.'
 // routes/web.php
 Route::get('/test-api', [UserController::class, 'testConnection']);
 
-Route::get('/rubbish', [TestController::class, 'rubbish'])->name('rubbish');
-Route::get('/rubbishCreate', [TestController::class, 'rubbishCreate'])->name('rubbishCreate');
-Route::get('/rubbishEdit', [TestController::class, 'rubbishEdit'])->name('rubbishEdit');
+Route::get('/rubbish', [RubbishController::class, 'index'])->name('rubbish');
+Route::get('/rubbishCreate', [RubbishController::class, 'create'])->name('rubbishCreate');
+Route::post('/rubbishStore', [RubbishController::class, 'store'])->name('rubbishStore');
+Route::get('/rubbishEdit/{id}', [RubbishController::class, 'edit'])->name('rubbishEdit');
+Route::put('/rubbishUpdate/{id}', [RubbishController::class, 'update'])->name('rubbishUpdate');
+Route::delete('/rubbishDestroy/{id}', [RubbishController::class, 'destroy'])->name('rubbishDestroy');
 Route::get('/point', [TestController::class, 'point'])->name('point');
 Route::get('/pointCreate', [TestController::class, 'pointCreate'])->name('pointCreate');
