@@ -2,7 +2,7 @@
    <div class="flex justify-between items-center">
       <div>
          <h2 class="text-2xl font-bold text-gray-800">Dashboard</h2>
-         <p class="text-sm text-gray-500">Selamat datang di panel superadmin Ecopoint++</p>
+         <p class="text-sm text-gray-500">Selamat datang di panel Ecopoint++</p>
       </div>
       <div class="flex items-center space-x-4">
          <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">

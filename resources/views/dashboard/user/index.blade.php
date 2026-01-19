@@ -183,7 +183,7 @@
                                     </a>
 
                                     <!-- Edit -->
-                                    <a href=""
+                                    <a href="{{ route('users.edit', $user['id_user'] ?? $user['id'] ?? '#') }}"
                                         class="p-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-600 rounded-lg transition-colors"
                                         title="Edit">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@
                                     </a>
 
                                     <!-- Delete -->
-                                    <form action="" method="POST"
+                                    <form action="{{ route('users.destroy', $user['id_user'] ?? $user['id'] ?? '#') }}" method="POST"
                                         class="inline"
                                         onsubmit="return confirm('Yakin ingin menghapus user {{ $user['nama'] ?? 'ini' }}?')">
                                         @csrf

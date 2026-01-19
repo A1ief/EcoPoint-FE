@@ -8,7 +8,6 @@
             <div class="flex items-center justify-between">
                <div>
                   <h3 class="text-3xl font-bold mb-2">Selamat Datang! 👋</h3>
-                  <p class="text-green-100">Kelola sistem Ecopoint++ dengan mudah dari panel superadmin</p>
                </div>
                <div class="hidden lg:block">
                   <svg class="w-24 h-24 text-white opacity-20" fill="currentColor" viewBox="0 0 20 20">

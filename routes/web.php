@@ -35,6 +35,7 @@ Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.'
     Route::get('users/create', [UserController::class, 'create'])->name('users.create');
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::get('users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 });
 // });
 
