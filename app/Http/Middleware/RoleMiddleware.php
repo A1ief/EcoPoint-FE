@@ -10,12 +10,24 @@ class RoleMiddleware
 {
     public function handle($request, Closure $next, ...$roles)
     {
-        if (!session()->has('is_login')) {
-            return redirect()->route('login');
+
+
+        // ❌ belum login
+        if (!session()->has('token')) {
+            return redirect()
+                ->route('showlogin')
+                ->with('error', 'Silakan login terlebih dahulu');
         }
 
-        if (!in_array(session('role'), $roles)) {
-            abort(403, 'Unauthorized');
+        $role = session('role');
+
+        // ❌ role tidak diizinkan
+        if (!$role || !in_array($role, $roles)) {
+            return redirect()
+                ->back()
+                ->with('error', 'Anda tidak memiliki akses');
+            // atau: abort(403);
+            dd(session('role'), $roles);
         }
 
         return $next($request);

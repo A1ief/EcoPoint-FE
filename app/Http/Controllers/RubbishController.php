@@ -22,6 +22,7 @@ class RubbishController extends Controller
     public function index()
     {
         $token = session('token');
+        
 
         if (!$token) {
             return $this->redirectLogin();
@@ -30,7 +31,7 @@ class RubbishController extends Controller
         $response = Http::acceptJson()
             ->withToken($token)
             ->get($this->apiUrl . '/sampah');
-
+        // dd($response);
         if ($response->status() === 401) {
             return $this->redirectLogin();
         }
